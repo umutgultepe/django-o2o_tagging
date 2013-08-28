@@ -32,6 +32,8 @@ class O2OTag(models.Model):
         "tagged_in_object_id")
 
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    params = models.CharField(max_length =1024, null=True, blank=True)
 
     objects = PassThroughManager.for_queryset_class(O2OTagQuerySet)()
 
