@@ -48,4 +48,4 @@ class O2OTagQuerySet(QuerySet):
             tagged_in_model)
         return self.filter(tagged_in_content_type=tagged_in_content_type,
                            tagged_in_object_id=tagged_in.pk
-                           ).distinct('tagged_object_id')
+                           ).distinct()
