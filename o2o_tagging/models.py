@@ -69,7 +69,6 @@ class O2OTag(models.Model):
             item_type = 2
         content = {
             'userId': str(tagger.id),
-            'album': album,
             'itemType': str(item_type),
             'itemId': str(item.id),
             'taggerName': tagger.get_full_name(),
@@ -79,6 +78,31 @@ class O2OTag(models.Model):
             'albumId': str(album.id),
             'ios_type': 'APNS_TAG',
             'android_type': '27',
+            'site_domain': 'eversnapapp.com'
+        }
+    
+        return content
+
+    def get_item_new_tag_context(self):
+        tagger = self.tagger
+        item = self.tagged_in
+        tagged = self.tagged
+        album = item.album
+        if item.__class__._meta.object_name == "Picture":
+            item_type = 1
+        else:
+            item_type = 2
+        content = {
+            'userId': str(tagger.id),
+            'itemType': str(item_type),
+            'itemId': str(item.id),
+            'taggerName': tagger.get_full_name(),
+            'thumbUrl': item.image_thumb.url if item_type == 1 else item.thumb,
+            'userName': tagged.get_full_name(),
+            'albumTitle': item.album.title or '',
+            'albumId': str(item.album.id),
+            'ios_type': 'APNS_TAG_TAGGED',
+            'android_type': '31',
             'site_domain': 'eversnapapp.com'
         }
     
@@ -112,7 +136,7 @@ class O2OTag(models.Model):
             return context
         if object_count == 3:
             user = objects[2].tagged
-            tagger = objects[1].tagger
+            tagger = objects[2].tagger
             context["userName3"] = context["userName2"]
             context["userName2"] = context["userName"]
             context["taggerName3"] = context["taggerName2"]
